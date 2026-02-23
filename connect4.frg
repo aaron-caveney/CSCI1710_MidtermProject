@@ -29,14 +29,14 @@ pred gravityHolds[b: Board] {
     }
 }
 
-/** X goes first */
-pred Xturn[b: Board] {
+/** Red goes first */
+pred Redturn[b: Board] {
     #{row, col: Int | b.board[row][col] = RED}
     =
     #{row, col: Int | b.board[row][col] = YELLOW}
 }
 
-pred Oturn[b: Board] {
+pred Yellowturn[b: Board] {
     #{row, col: Int | b.board[row][col] = RED}
     =
     add[1, #{row, col: Int | b.board[row][col] = YELLOW}]
