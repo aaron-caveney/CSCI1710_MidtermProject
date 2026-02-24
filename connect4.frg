@@ -47,7 +47,7 @@ pred Yellowturn[b: Board] {
 
 // one of the above must always be true to ensure that no players turn is skipped
 pred balanced[b: Board] {
-    Xturn[b] or Oturn[b]
+    Redturn[b] or Yellowturn[b]
 }
 
 // 4 in a row horizonatly anywhere win the game
@@ -103,8 +103,8 @@ pred winning[b: Board, p: Player] {
  // This makes a playes move, must be valid and follow the pred stated above.
 pred move[pre: Board, moveCol: Int, p: Player, post: Board] {
     // who every played last must be the opposite player of p
-    p = RED implies Xturn[pre]
-    p = YELLOW implies Oturn[pre]
+    p = RED implies Redturn[pre]
+    p = YELLOW implies Yellowturn[pre]
 
     moveCol >= 0
     moveCol <= 6
