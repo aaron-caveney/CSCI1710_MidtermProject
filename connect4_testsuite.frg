@@ -573,12 +573,6 @@ test suite for winning {
             (all r, c: Int | no b.board[r][c])
     } is unsat }
     
-    // Property tests
-    // WinningIsSomeWinType: assert {
-    //     all b: Board, p: Player | 
-    //         winning[b, p] implies (winRow[b, p] or winCol[b, p] or winDiag[b, p])
-    // } is necessary for winning
-    
     test expect { winningExists: {
         some b: Board, p: Player | winning[b, p]
     } is sat }
