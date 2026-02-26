@@ -25,7 +25,7 @@ pred noCycles {
 ///////////////////////////
 
 
-/*
+
 test suite for wellformed {
     // assert test
     MovePreservesWellformed: assert all pre, post: Board, col: Int, p: Player | {
@@ -111,7 +111,7 @@ test suite for starting {
     
     //assert starting is sat
 }
-/*
+
 test suite for gravityHolds {
     // assert test
 
@@ -679,7 +679,7 @@ test suite for wellformed_game {
         wellformed_game implies (all b: Board | wellformed[b])
     } is necessary for wellformed_game
 }
-*/
+
 
 test suite for linear_game {
     // assert tests
