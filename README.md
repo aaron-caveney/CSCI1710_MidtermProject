@@ -4,7 +4,7 @@
     We are modeling Connect 4. Due to the restictions of the Froglet and the most aount of moves we are able to go up are 7. fortenute for us, this is exctly how many moves are needed to have a winner and a looser. The goal of cennect 4 is in its title, the first person to put 4 tiles in a row either verticaly, horizontaly, and diagonaly wins. Unlike tic tac toe, when playing the real game gravity affects the peices, thus if a piece will go to the drop through a column until it hits the bottom row or a piece under it. 
 
 # Model Design and Visualization:
-    As stated above, our model is desinged to play a game where a winner is reached in 7 oves. that is, each player will play a piece at each baord. when looking at the Table view of the model, you can the starting board under the tab: first. When looking at the board tab, you will see this first board is not present. that is becouse, at the starting board, no piece has been played. Then, looking at the next board, found on the last column of the next table, you will see there is one pice that has been played. The next baord, then has 2 peices played, one from each player. and this alternating keeps goining until a winner is found. 
+    As stated above, our model is desinged to play a game where a winner is reached in 7 moves. that is, each player will play a piece at each baord. when looking at the Table view of the model, you can the starting board under the tab: first. When looking at the board tab, you will see this first board is not present. that is becouse, at the starting board, no piece has been played. Then, looking at the next board, found on the last column of the next table, you will see there is one pice that has been played. The next baord, then has 2 peices played, one from each player. and this alternating keeps goining until a winner is found. 
 
 # Signatures and Predicates:
     1. abstract sig Player {} - A sig that creates a player. this is so each board can be atributed to a specific player
@@ -42,6 +42,12 @@
     17. pred linear_game- This makes sure there are no cycles in tha game and that it unfolds linearly. this makes sure no board that has been visited(played on) is played on again. 
 
 # Testing: 
+
+    Our test suite verifies the correctness of the Connect 4 model at three levels: board structure, move behavior, and full game traces. The goal is to ensure that both the static constraints of the board and the dynamic rules of gameplay are properly enforced.
+
+    At the board level, we test core invariants such as wellformed, starting, and gravityHolds. These tests confirm that pieces only appear within valid bounds, that the starting board is empty, and that gravity is respected so pieces stack as a real connect 4 board would. We include both positive examples and negative cases, such as floating pieces and out-of-bounds placements. we also assert that moves preserve these structural properties. We then verify our turn logic using Redturn, Yellowturn, and balanced. These tests ensure that turn order is determined correctly by piece counts and that invalid count differences are rejected amd thus return UNSAT. For win detection, we test winRow, winCol, winDiag, and winning separately. Each win condition is validated with valid examples as well as counterexamples that are slightly off to ensure that exactly four consecutive pieces are required, no more and no less. I also assert that each primitive win condition implies the overall winning predicate.
+
+    The move predicate is then tested to ensure pieces land in the lowest available row, increase the piece count by exactly one, respect turn order, and reject illegal moves such as playing in a full column or moving after a win. Finally, we test wellformed_game and linear_game to validate full execution. These tests again ensure the game starts empty, all boards remain valid throughout the game, winning boards are final and the trace is linear and acyclic.
 
 
 
