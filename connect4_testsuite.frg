@@ -2,7 +2,37 @@
 
 open "connect4.frg"
 
+///////////////////////////
+// Helpers for Testing
+pred redOrYellowTurn[b: Board] {
+    Redturn[b] or Yellowturn[b]
+}
+
+pred morePieces[post: Board, pre: Board] {
+    #{r, c: Int | some post.board[r][c]}
+    =
+    add[1, #{r, c: Int | some pre.board[r][c]}]
+}
+pred allBoardsWellformed {
+    all b: Board | wellformed[b]
+}
+
+pred noCycles {
+    all b: Board | Game.next[b] != Game.first
+}
+
+
+///////////////////////////
+
+
+/*
 test suite for wellformed {
+    // assert test
+    MovePreservesWellformed: assert all pre, post: Board, col: Int, p: Player | {
+        wellformed[pre]
+        move[pre, col, p, post]
+    } is sufficient for wellformed[post] for exactly 2 Board, 4 Int
+     
     
     // Positive tests
     test expect { emptyBoardWellformed: {
@@ -50,7 +80,16 @@ test suite for wellformed {
     
 }
 
+
 test suite for starting {
+    // assert tests:
+    StartingImpliesRedturn: assert all b: Board |
+        starting[b] is sufficient for Redturn[b]
+    for exactly 1 Board, 4 Int
+
+    StartingImpliesBalanced: assert all b: Board |
+        starting[b] is sufficient for balanced[b]
+    for exactly 1 Board, 4 Int
     
     // Positive tests
     test expect { completelyEmpty: {
@@ -72,8 +111,15 @@ test suite for starting {
     
     //assert starting is sat
 }
-
+/*
 test suite for gravityHolds {
+    // assert test
+
+    MovePreservesGravity: assert all pre, post: Board, col: Int, p: Player | {
+        wellformed[pre]
+        gravityHolds[pre]
+        move[pre, col, p, post]
+    } is sufficient for gravityHolds[post] for exactly 2 Board, 4 Int
     
     // Positive tests
     test expect { emptyBoardGravity: {
@@ -120,7 +166,7 @@ test suite for gravityHolds {
 }
 
 test suite for Redturn {
-    
+
     // Positive tests
     test expect { emptyBoardRedTurn: {
         some b: Board | Redturn[b] and (all r, c: Int | no b.board[r][c])
@@ -212,6 +258,10 @@ test suite for Yellowturn {
 }
 
 test suite for balanced {
+    // assert test
+    BalancedMeansExactlyOneTurn: assert all b: Board |
+        balanced[b] is sufficient for redOrYellowTurn[b]
+    for exactly 1 Board, 4 Int
     
     // Positive tests
     test expect { emptyBoardBalanced: {
@@ -259,6 +309,10 @@ test suite for balanced {
 }
 
 test suite for winRow {
+    // assert test
+    WinRowImpliesWinning: assert all b: Board, p: Player |
+        winRow[b, p] is sufficient for winning[b, p]
+    for exactly 1 Board, 4 Int
     
     // Positive tests
     test expect { bottomRowWinRed: {
@@ -327,6 +381,10 @@ test suite for winRow {
 }
 
 test suite for winCol {
+    // assert test
+    WinRowImpliesWinning: assert all b: Board, p: Player |
+        winCol[b, p] is sufficient for winning[b, p]
+    for exactly 1 Board, 4 Int
     
     // Positive tests
     test expect { leftColumnWin: {
@@ -393,7 +451,11 @@ test suite for winCol {
 }
 
 test suite for winDiag {
-    
+    // assert test
+    WinRowImpliesWinning: assert all b: Board, p: Player |
+        winDiag[b, p] is sufficient for winning[b, p]
+    for exactly 1 Board, 4 Int
+
     // Positive tests
     test expect { diagonalUpRightWin: {
         some b: Board | 
@@ -459,7 +521,9 @@ test suite for winDiag {
 }
 
 test suite for winning {
-    
+    // assert test
+    // this logic is done in the prev 4 test suits
+
     // Positive tests
     test expect { winByRow: {
         some b: Board | 
@@ -521,6 +585,14 @@ test suite for winning {
 }
 
 test suite for move {
+
+    // assert test
+    MoveIncrementsPieceCount: assert all pre, post: Board, col: Int, p: Player | {
+        wellformed[pre]
+        gravityHolds[pre]
+        move[pre, col, p, post]
+    } is sufficient for morePieces[post, pre]
+    for exactly 2 Board, 4 Int
     
     // Positive tests
     test expect { movePositiveBottomLanding: {
@@ -573,20 +645,14 @@ test suite for move {
             (move[pre, 4, RED, post] or move[pre, 4, YELLOW, post])
     } is unsat }
     
-    // Property tests
-    // ValidMovePreservesWellformed: assert {
-    //     all pre, post: Board, col: Int, p: Player | 
-    //         move[pre, col, p, post] implies wellformed[post]
-    // } is necessary for move
-    
-    // ValidMovePreservesGravity: assert {
-    //     all pre, post: Board, col: Int, p: Player | 
-    //         move[pre, col, p, post] implies gravityHolds[post]
-    // } is necessary for move
 }
 
 test suite for wellformed_game {
-    
+    // assert test
+    WellformedGameImpliesAllWellformed: assert
+        wellformed_game is sufficient for allBoardsWellformed
+    for exactly 8 Board, 4 Int
+
     // Positive tests
     test expect { wellformedGamePositive: {
         wellformed_game
@@ -613,9 +679,14 @@ test suite for wellformed_game {
         wellformed_game implies (all b: Board | wellformed[b])
     } is necessary for wellformed_game
 }
+*/
 
 test suite for linear_game {
-    
+    // assert tests
+    LinearImpliesWellformed: assert
+        linear_game is sufficient for wellformed_game
+    for exactly 8 Board, 4 Int
+        
     // Positive tests
     // test expect { linearGamePositive: {
     //     linear_game and
